@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class NewsController extends Controller
 {
@@ -11,7 +13,9 @@ class NewsController extends Controller
 
     public function index()
     {
-        $news = DB::table('news')->get();
+        $news = News::query()->paginate(6);
+
+       // $news = DB::table('news')->get();
 /*        $news = DB::table('news')
             ->join('categories', 'categories.id', 'news.category_id')
             ->select('news.*', 'categories.title as categoryTitle')
@@ -23,9 +27,11 @@ class NewsController extends Controller
         ]);
     }
 
-    public function show(int $id)
+    public function show(News $news): view
     {
-        $news = DB::table('news')->find($id);
+       // $news = DB::table('news')->find($id);
+
+       // $news = News::find($id);
 
         return view('news.show')->with([
             'news' => $news
