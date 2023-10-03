@@ -3,7 +3,8 @@
         <a class="navbar-brand" href="{{ url('/') }}">
             {{ config('app.name', 'Laravel') }}
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -13,9 +14,15 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{{ route('news.index') }}">Новости</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.index') }}">Админка</a>
-                </li>
+
+                @auth
+                    @if(Auth::user()->is_admin === true)
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.index') }}">Админка</a>
+                        </li>
+                    @endisset
+                @endauth
+
             </ul>
 
             <!-- Right Side Of Navbar -->
@@ -34,8 +41,16 @@
                         </li>
                     @endif
                 @else
+                    @if(Auth::user()->avatar !== null)
+                        <li class="nav-item">
+                            <img src="{{ Auth::user()->avatar }}" style="width:45px;">
+                        </li>
+
+                    @endif
+
                     <li class="nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                           data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             {{ Auth::user()->name }}
                         </a>
 

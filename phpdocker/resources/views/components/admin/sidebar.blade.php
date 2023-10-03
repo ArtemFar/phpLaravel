@@ -21,22 +21,27 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-2" href="{{ route('admin.news.index') }}">
-                        @if(request()->routeIs('admin.index'))
-                            <svg class="bi"><use xlink:href="#cart"/></svg>
-                        @else
+                        @if(request()->routeIs('admin.news.index'))
                             <svg class="bi"><use xlink:href="#cart-fill"/></svg>
+                        @else
+                            <svg class="bi"><use xlink:href="#cart"/></svg>
                         @endif
                         Новости
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2" href="#">
-                        <svg class="bi"><use xlink:href="#people"/></svg>
+                    <a class="nav-link d-flex align-items-center gap-2" href="{{ route('admin.users') }}">
+
+                        @if(request()->routeIs('admin.users'))
+                            <svg class="bi"><use xlink:href="#people-fill"/></svg>
+                        @else
+                            <svg class="bi"><use xlink:href="#people"/></svg>
+                        @endif
                         Пользователи
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2" href="#">
+                    <a class="nav-link d-flex align-items-center gap-2" href="{{ route('admin.parser') }}">
                         <svg class="bi"><use xlink:href="#graph-up"/></svg>
                         Парсер
                     </a>
