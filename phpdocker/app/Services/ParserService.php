@@ -2,10 +2,13 @@
 
 namespace App\Services;
 
-use App\Services\Interfaces\Parser;
-use Orchestra\Parser\Xml\Facade as XmlParser;
+use App\Services\Contracts\Parser;
+use Illuminate\Support\Facades\Storage;
+use JetBrains\PhpStorm\NoReturn;
+use Orchestra\Parser\Xml\Facade as XmlParserData;
 
 class ParserService implements Parser
+
 {
     private string $link;
 
@@ -16,9 +19,9 @@ class ParserService implements Parser
         return $this;
     }
 
-    public function saveParseData(): void
+    #[NoReturn] public function saveParseData(): void
     {
-        $parser = XmlParser::load($this->link);
+        $parser = XmlParserData::load($this->link);
 
         $data = $parser->parse([
             'title' => [
@@ -34,10 +37,13 @@ class ParserService implements Parser
                 'uses' => 'channel.image.url',
             ],
             'news' => [
-                'uses' => 'channel.item[title,link,author,description,pubDate,category,enclosure::url]'
+                'uses' => 'channel.item[title,link,author,description,pubDate,category]'
             ],
         ]);
 
-        dd($data);
+        $explode = explode("/", $this->link);
+        $fileName = end($explode);
+
+        Storage::append('parse/' . $fileName . ".json", json_encode($data));
     }
 }

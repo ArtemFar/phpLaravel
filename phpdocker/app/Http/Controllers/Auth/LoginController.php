@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Events\DefineLoginEvent;
+use App\Events\DefineLogInEvent;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -28,7 +28,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = RouteServiceProvider::ACCOUNT;
 
     /**
      * Create a new controller instance.
@@ -40,8 +40,8 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    protected function authenticated(Request $request, $user)
+    public function authenticated(Request $request, $user)
     {
-        event(new DefineLoginEvent($user));
+        event(new DefineLogInEvent($user));
     }
 }

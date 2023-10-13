@@ -2,39 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\News;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class NewsController extends Controller
 {
-    //use NewsTrait;
-
-    public function index()
+    public function index(): View
     {
-        $news = News::query()->paginate(6);
-
-       // $news = DB::table('news')->get();
-/*        $news = DB::table('news')
-            ->join('categories', 'categories.id', 'news.category_id')
-            ->select('news.*', 'categories.title as categoryTitle')
-            ->toSql();*/
-
-
-        return view('news.index')->with([
-            'newsList' => $news
+        return  view('news.index', [
+            'newsCategories' => Category::all(),
+            'newsList' => News::all(),
         ]);
     }
 
-    public function show(News $news): view
+    public function show(int $id, int $categoriesID): View
     {
-       // $news = DB::table('news')->find($id);
-
-       // $news = News::find($id);
-
-        return view('news.show')->with([
-            'news' => $news
+        return view('news.show', [
+            'news' => News::find($id),
+            'categories' => Category::find($categoriesID),
         ]);
     }
 }

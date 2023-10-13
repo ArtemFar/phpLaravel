@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Requests\Admin\News;
+namespace App\Http\Requests\Admin\Category;
 
 use App\Enums\News\Status;
-use App\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
@@ -24,11 +23,8 @@ class CreateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $table_name_category = (new Category())->getTable();
         return [
             'title' => ['required', 'string', 'min:3', 'max:150'],
-            'category_id' => ['required', 'integer', "exists:{$table_name_category},id"],
-            'author' => ['required', 'string', 'min:3', 'max:100'],
             'status' => ['required', new Enum(Status::class)],
             'url' => ['required', 'string'],
             'description' => ['nullable', 'string'],

@@ -2,31 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\DefineLoginEvent;
-use App\Services\Interfaces\Social;
-use Illuminate\Support\Facades\Auth;
+use App\Services\Contracts\Social;
+use Illuminate\Http\RedirectResponse;
 use Laravel\Socialite\Facades\Socialite;
+use Symfony\Component\HttpFoundation\RedirectResponse as SymfonyRedirectResponse;
 
 class SocialProvidersController extends Controller
 {
-    public function redirect()
+    public function redirect(string $driver): SymfonyRedirectResponse | RedirectResponse
     {
-        return Socialite::driver('vkontakte')->redirect();
+        return Socialite::driver($driver)->redirect();
     }
 
-    public function callback(Social $social)
+    public function callback(string $driver, Social $social): mixed
     {
-        try {
-            $socialUser = Socialite::driver('vkontakte')->user();
-        } catch (\Exception $e) {
-            return redirect('/login');
-        }
-
-        $user = $social->findOrCreateUser($socialUser);
-
-        Auth::login($user, true);
-        event(new DefineLoginEvent($user));
-
-        return redirect(route('home'));
+        return redirect(
+            $social->loginAndGetRedirectUrl(Socialite::driver($driver)->user())
+        );
     }
 }

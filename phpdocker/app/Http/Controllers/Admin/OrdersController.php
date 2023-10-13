@@ -3,20 +3,20 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Users\Edit;
-use App\Models\User;
+use App\Http\Requests\Admin\Orders\Edit;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class UsersController extends Controller
+class OrdersController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(): View
     {
-        return view('admin.users.index', [
-            'users' => User::all(),
+        return view('admin.orders.index', [
+            'orders' => Order::all(),
         ]);
     }
 
@@ -47,36 +47,36 @@ class UsersController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user)
+    public function edit(Order $order)
     {
-        return view( 'admin.users.edit', [
-            'user' => $user,
+        return view( 'admin.orders.edit', [
+            'order' => $order,
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Edit $request, User $user)
+    public function update(Edit $request, Order $order)
     {
-        $user->fill($request->validated());
+        $order->fill($request->validated());
 
-        if($user->save()) {
-            return redirect()->route('admin.users.index')->with('success', __('The record was saved successfully'));
+        if($order->save()) {
+            return redirect()->route('admin.orders.index')->with('success', __('The record was saved successfully'));
         }
 
-        return back()->with('error', __('The record was saved successfully'));
+        return back()->with('error', __('We can not save item, pleas try again'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(Order $order)
     {
-        if ($user->delete()) {
-            return redirect()->route('admin.users.index')->with('success', __('The record was deleted successfully'));
+        if ($order->delete()) {
+            return redirect()->route('admin.orders.index')->with('success', __('The record was deleted successfully'));
         }
 
-        return back()->with('error', 'Record not found');
+        return back()->with('error', __('Record not found'));
     }
 }

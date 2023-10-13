@@ -3,21 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Users\Edit;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 
-class UsersController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index()
     {
-        return view('admin.users.index', [
-            'users' => User::all(),
-        ]);
+        return \view('admin.users-list', ['h1' => 'Пользователи', 'users' => User::query()->paginate(25)]);
     }
 
     /**
@@ -49,23 +45,22 @@ class UsersController extends Controller
      */
     public function edit(User $user)
     {
-        return view( 'admin.users.edit', [
-            'user' => $user,
-        ]);
+//        dd($user);
+        return \view('admin.edit-user', ['user' => $user]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Edit $request, User $user)
+    public function update(Request $request, User $user)
     {
-        $user->fill($request->validated());
-
-        if($user->save()) {
-            return redirect()->route('admin.users.index')->with('success', __('The record was saved successfully'));
-        }
-
-        return back()->with('error', __('The record was saved successfully'));
+       $request_data = $request->only('email', 'name', 'is_admin');
+       $request_data['is_admin'] = isset($request_data['is_admin']) && $request_data['is_admin'] == 'on';
+       $user->fill($request_data);
+       if($user->save()){
+           return redirect()->route('admin.users.index')->with('success', 'Пользователь успешно изменен');
+       }
+        return back()->with('error', 'Не удалось отредактировать пользователя');
     }
 
     /**
@@ -73,10 +68,6 @@ class UsersController extends Controller
      */
     public function destroy(User $user)
     {
-        if ($user->delete()) {
-            return redirect()->route('admin.users.index')->with('success', __('The record was deleted successfully'));
-        }
-
-        return back()->with('error', 'Record not found');
+        $user->delete();
     }
 }

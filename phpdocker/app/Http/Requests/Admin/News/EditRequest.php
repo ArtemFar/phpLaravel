@@ -24,12 +24,13 @@ class EditRequest extends FormRequest
      */
     public function rules(): array
     {
-        $tableNameCategory = (new Category())->getTable();
+        $table_name_category = (new Category())->getTable();
         return [
             'title' => ['required', 'string', 'min:3', 'max:150'],
-            'category_id' => ['required', 'integer', "exists:{$tableNameCategory},id"],
-            'author' => ['required', 'string', 'min:2', 'max:100'],
+            'category_id' => ['required', 'integer', "exists:{$table_name_category},id"],
+            'author' => ['required', 'string', 'min:3', 'max:100'],
             'status' => ['required', new Enum(Status::class)],
+            'url' => ['required', 'string'],
             'description' => ['nullable', 'string'],
         ];
     }
