@@ -1,9 +1,16 @@
-@extends('layouts.main')
-@section('title') Главная - @parent @stop
+@extends('layouts.admin')
 @section('content')
-    <h2>Добро пожаловать</h2> <br>
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-        Свежие новости и многое другое!
-
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Control Panel</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+        </div>
     </div>
+    @include('inc.message')
+    <x-alert :type="request()->get('type','light')" message="Notification"></x-alert>
+    <x-alert type="danger" message="Notification"></x-alert>
+    <x-alert type="warning" message="Notification"></x-alert>
+    <x-alert type="success" message="Notification"></x-alert>
+    <x-alert type="info" message="Notification"></x-alert>
+    <x-alert type="dark" message="Notification"></x-alert>
+    <x-alert type="primary" message="Notification"></x-alert>
 @endsection
